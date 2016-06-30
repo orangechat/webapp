@@ -1,0 +1,91 @@
+.{OC}-Message
+	padding: (base-vs / 2) base-hs
+	word-break: break-word
+	overflow-wrap: break-word
+	word-wrap: break-word
+	position: relative
+
+	&--highlight
+		background-color: #FBE9E7
+
+	&--action &__content
+		font-style: italic
+
+		&-author
+
+			&:before
+				content: '~ '
+
+	&:nth-child(2n)
+		background-color: #F5F5F5
+
+	&--pending
+		.{OC}-Message__author, .{OC}-Message__content, .{OC}-Message__timestamp
+			opacity: .4
+
+.{OC}-Message--inline
+	.{OC}-Message
+		&__timestamp
+			color: black-hint
+			position: absolute
+			font-size: em(14px)
+			left: base-hs
+			top: base-vs / 2
+
+		&__author
+			font-weight: 500
+			cursor: pointer
+			font-size: em(14px)
+			margin-right: 8px
+
+			&:hover
+				opacity: .7
+
+		&__content
+			font-size: em(14px)
+
+			&--username
+				font-style: italic
+
+		&__error
+			background: #DC7B7B
+			color: #754141
+			padding: 8px
+			border: 1px solid #9C6464
+
+			&-retry
+				cursor: pointer
+				margin-left: 1em
+
+.{OC}-Message--block
+	.{OC}-Message
+		&__timestamp
+			color: black-hint
+			font-size: em(12px)
+			margin-left: 9px
+			display: inline
+
+		&__content
+			font-size: em(14px)
+			display: block
+
+			&--username
+				font-style: italic
+
+		&__author
+			font-weight: 500
+			cursor: pointer
+			font-size: em(14px)
+
+			&:hover
+				opacity: .7
+
+		&__error
+			background: #DC7B7B
+			color: #754141
+			padding: 8px
+			border: 1px solid #9C6464
+
+			&-retry
+				cursor: pointer
+				margin-left: 1em

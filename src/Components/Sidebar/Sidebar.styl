@@ -1,0 +1,270 @@
+.{prefix}-Sidebar
+	width: sidebar-width
+	position: absolute
+	top: 0
+	left: 0
+	height: 100%
+	background-color: brand-primary
+
+	&__header
+		position: absolute
+		height: topbar-height
+		left: 0
+		right: 0
+		top: 0
+		background-color: brand-primary
+		z-index: 80
+		color: white-text
+
+		&-search
+			padding: 9px 56px 0 base-hs
+			position: relative
+			z-index: 101
+
+			svg
+				fill: white-secondary
+				position: absolute
+				top: 16px
+				left: base-hs + 10px
+				pointer-events: none
+
+			&-input
+				height: 30px
+				font-size: em(14px)
+
+			input
+				display: block
+				width: 100%
+				border-radius: 3px
+				padding-left: base-hs * 2 + 5px
+				padding-right: base-hs
+				border: 0
+				color: white-secondary
+				background-color: white-underlays
+				position: relative
+
+				&::placeholder
+					color: white-secondary
+
+				&:focus
+					outline: 0
+					color: black-secondary
+
+					&::placeholder
+						color: black-secondary
+
+		&-user-options
+			position: absolute
+			top: 0
+			right: 0
+			bottom: 0
+			width: 24px
+			margin: 13px base-hs 0 base-hs
+			cursor: pointer
+			z-index: 102
+
+			svg
+				fill: white-hint
+				height: auto
+				display: inline-block
+
+		&-collapse
+			position: absolute
+			right: base-hs
+			top: 50%
+			margin-top: -12px
+			fill: white-hint
+			cursor: pointer
+			display: inline-block
+
+	&--join-dialog-open &__header-search svg
+		fill: black-secondary
+
+	&--join-dialog-open &__header
+
+		&-search
+			opacity: 1
+			pointer-events: auto
+
+		&-search-control
+			fill: black-text
+			left: base-hs * 2
+			margin-top: -2px
+
+	&__channels
+		position: absolute
+		top: topbar-height
+		bottom: 0
+		left: 0
+		right: 0
+		overflow-y: auto
+
+		&--no-channels p
+			padding: base-vs base-hs
+			font-size: em(14px)
+			color: white-hint
+
+		&-item
+			padding: base-vs base-hs
+			cursor: pointer
+			position: relative
+
+			&-name
+				font-size: em(14px)
+				display: block
+				color: white-text
+				font-weight: 500
+
+			&-sub-name
+				font-size: em(12px)
+				color: white-secondary
+				display: block
+
+			&-close
+				position: absolute
+				right: base-hs
+				top: 50%
+				margin-top: -12px
+				fill: white-secondary
+				cursor: pointer
+				display: none
+				padding: 2px
+				border: 1px solid white-secondary
+				border-radius: 50%
+
+			&-badge
+				display: inline-block
+				color: white-secondary
+				font-size: em(12px)
+				height: 18px
+				padding: 0 (base-hs / 2)
+				border: 1px solid white-secondary
+				border-radius: 10px
+				line-height: 1
+				padding-top: 2px
+				position: absolute
+				right: base-hs
+				top: 50%
+				margin-top: -9px
+				text-align: center
+
+			&:hover
+				background-color: brand-hover
+
+			&:hover &-close
+				display: block
+
+			&:hover &-badge
+				display: none
+
+			&--sub-channel
+				padding: base-vs base-hs base-vs (2 * base-hs)
+				margin-bottom: 8px
+
+			&--sub-channel &-name
+				font-size: em(14px)
+
+			&--sub-channel &-sub-name
+				display: none
+
+			&--active
+				background-color: brand-active
+
+				&:hover
+					background-color: brand-active
+
+	&__join-dialog
+		z-index: 101
+		display: block
+		position: absolute
+		z-index: 100
+		background-color: #FFFFFF
+		border-radius: 3px
+		box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.14), 0 0px 5px 0 rgba(0, 0, 0, 0.12), 0 2px 1px -2px rgba(0, 0, 0, 0.2)
+		padding: base-vs 0
+		padding-top: 30px
+		left: base-hs
+		top: 9px
+		right: base-hs
+
+		&-channels
+			max-height: 250px
+			border-top: 1px solid black-dividers
+			overflow-y: auto
+			overflow-x: hidden
+			margin-top: base-vs
+			padding-top: base-vs
+
+			&-loading
+				position: relative
+				margin: 0px auto
+				width: 24px
+				padding: base-vs 0
+
+				&:before
+					content:''
+					display: block
+					padding-top: 100%
+
+				svg
+					animation: rotate 2s linear infinite
+					transform-origin: center center
+					position: absolute
+					top: 0
+					bottom: 0
+					left: 0
+					right: 0
+					margin: auto
+
+					 circle
+						stroke-dasharray: 1,200
+						stroke-dashoffset: 0
+						animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite
+						stroke-linecap: round
+
+			&-item
+				cursor: pointer
+				color: black-text
+				font-size: em(14px)
+				padding: base-vs base-hs
+				display: block
+
+				&:hover
+					background-color: black-underlays
+
+	&__join-something
+		padding: 6px
+		margin: 6px
+		color: rgba(255,255,255,0.7)
+		background-color: rgba(255,255,255,0.25)
+		border-radius: 3px
+
+		&-go
+			cursor: pointer
+			display: block
+			text-align: center
+
+@keyframes rotate
+	100%
+		transform: rotate(360deg)
+
+@keyframes dash
+	0%
+		stroke-dasharray: 1,200
+		stroke-dashoffset: 0
+	50%
+		stroke-dasharray: 89,200
+		stroke-dashoffset: -35px
+	100%
+		stroke-dasharray: 89,200
+		stroke-dashoffset: -124px
+
+@keyframes color
+	100%, 0%
+		stroke: #F44336
+	40%
+		stroke: #3F51B5
+	66%
+		stroke: #4CAF50
+	80%, 90%
+		stroke: #FFC107

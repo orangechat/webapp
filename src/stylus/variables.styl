@@ -1,0 +1,49 @@
+// To allow for easy styling and to prevent class clashes
+prefix = 'OC'
+
+// Brand colors
+brand-primary = #FF5722
+brand-hover = #F4511E
+brand-dividers = #E64A19
+brand-active = #E64A19
+brand-light = #FF8A65
+
+// Typography
+font-family = "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif
+base-font-size = 14px
+base-line-height = 20px
+
+// Material design based blacks and whites
+white-text      = alpha(#FFFFFF, 100%)
+white-secondary = alpha(#FFFFFF, 70%)
+white-hint      = alpha(#FFFFFF, 50%)
+white-underlays = alpha(#FFFFFF, 25%)
+white-dividers  = alpha(#FFFFFF, 18%)
+black-text      = alpha(#000000, 87%)
+black-secondary = alpha(#000000, 54%)
+black-hint      = alpha(#000000, 38%)
+black-dividers  = alpha(#000000, 13%)
+black-underlays = alpha(#000000, 4%)
+
+// Layout options
+topbar-height = 48px
+sidebar-width = 220px
+base-vs = 10px // Vertical spacing
+base-hs = 16px // Horizontal spacing
+base-cs = base-vs base-hs // Combined spacing
+
+// Convert pixel values to em values
+em(val, base = 14px)
+	return unit(val / base, 'em')
+
+// Simple clearfix from http://nicolasgallagher.com/micro-clearfix-hack/
+clearfix()
+	zoom: 1
+
+	&:after
+	&:before
+		content: ""
+		display: table
+
+	&:after
+		clear: both

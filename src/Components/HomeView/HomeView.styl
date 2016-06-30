@@ -1,0 +1,56 @@
+.{prefix}-HomeView
+	position: absolute
+	top: 0
+	left: 0
+	bottom: 0
+	right: 0
+	display: flex
+	align-items: center
+	justify-content: center
+	flex-direction: column
+	text-align: center
+	background: brand-primary
+
+	&__get-started
+		padding: 0 25px
+
+		&-branding-logo
+			height: 35px
+			width: auto
+
+		h4
+			font-size: em(15px)
+			font-weight: 500
+			color: white-text
+			margin: 10px 0
+
+		&-button
+			display: inline-block
+			text-align: center
+			font-size: em(14px)
+			align-self: center
+			color: white-text
+			padding: 3px 8px
+			font-weight: 500
+			border: 1px solid white-text
+			border-radius: 3px
+			line-height: 1.1
+			cursor: pointer
+			background-color: brand-primary
+
+			&:hover
+				border-color: white-secondary
+				color: white-secondary
+				text-decoration: none
+
+.{prefix}__ui--standalone .{prefix}-HomeView
+	&__get-started
+		h4, &-button
+			font-size: em(27px)
+
+		&-button
+			margin-top: 30px
+
+		&-branding-logo
+			height: 60px
+			margin-bottom: 10px

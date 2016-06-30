@@ -1,0 +1,33 @@
+.{prefix}-OptionsMenu
+	position: absolute
+	left: 10px
+	top: base-vs
+	z-index: 120
+	right: 10px
+	background-color: #FFFFFF
+	border-radius: 3px
+	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.14), 0 0px 5px 0 rgba(0, 0, 0, 0.12), 0 2px 1px -2px rgba(0, 0, 0, 0.2)
+	overflow: hidden
+	padding: base-vs 0
+
+	&__title
+		font-size: em(15px)
+		font-weight: 500
+		color: black-text
+		padding: base-vs base-hs
+		padding-top: 0
+
+	&__link
+		cursor: pointer
+		color: black-text
+		font-size: em(14px)
+		padding: base-vs base-hs
+		display: block
+
+		&:hover
+			background-color: black-underlays
+
+	hr
+		margin: base-vs 0
+		border: 0
+		border-top: 1px solid black-dividers

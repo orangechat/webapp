@@ -1,0 +1,145 @@
+.{prefix}
+
+	&-list
+		li
+			padding-left: 1em
+			list-style-type: disc
+			list-style-position: inside
+
+	&-link
+		text-decoration: none
+		color: #006D9A
+		cursor: pointer
+
+	&-button
+		color: white-text
+		padding: 3px 8px
+		border: 1px solid white-text
+		border-radius: 3px
+		line-height: 1.1
+		cursor: pointer
+
+		&__dark
+			color: black-text
+			padding: 3px 8px
+			border: 1px solid black-text
+			border-radius: 3px
+			line-height: 1.1
+			cursor: pointer
+
+	&__ui
+		position: fixed
+		bottom: 0
+		right: 20px
+		width: 570px
+		height: 360px
+		background-color: #FFFFFF
+		box-shadow: 0 0 28px rgba(0,0,0,0.3)
+		z-index: 2147483647
+		transition: width 175ms ease
+		overflow: hidden
+		text-size-adjust: 100%
+		-webkit-font-smoothing: subpixel-antialiased
+		text-rendering: optimizelegibility
+		font-family: font-family
+		font-size: base-font-size
+		color: black-text
+		line-height: base-line-height
+		line-height: em(base-line-height)
+
+		*, *:before, *:after
+			box-sizing: border-box
+
+		&--sidebar-collapsed, &--loggedout
+			width: 350px
+
+		&--loggedout
+			height: 200px
+
+		&--closed
+			width: auto
+			height: auto
+			background-color: brand-primary
+
+		&--toolbox
+			bottom: 25px
+			z-index: 2147483645
+
+		&--standalone
+			width: 100%
+			height: 100%
+			right: 0
+			box-shadow: none
+			transition: none
+			z-index: 1
+
+	&__shadow-underlay
+		overflow: hidden
+		position: absolute
+		z-index: 79
+		left: 0
+		top: 10px
+		right: 0
+		height: 56px
+
+		&-inner
+			position: absolute
+			left: 0
+			top: -10px
+			right: 0
+			height: topbar-height
+			box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3)
+
+	&__workspace
+		position: absolute
+		width: calc(100% - 220px)
+		height: 100%
+		left: 220px
+		top: 0
+		background-color: #FFFFFF
+		transition: left 175ms ease, width 175ms ease
+
+	&__ui--standalone &-Sidebar__header-collapse
+		transform: rotate(180deg)
+
+	&__ui--loggedout &__shadow-underlay
+		display: none
+
+	&__ui--sidebar-collapsed &__workspace, &__ui--loggedout &__workspace
+		left: 0
+		width: 100%
+
+	&__ui--sidebar-collapsed &-MessageRoom__header
+		background-color: brand-primary
+
+		&-collapse
+			left: 16px
+
+			svg
+				fill: white-hint
+
+		&-info
+			left: 56px
+
+			h4
+				color: white-text
+
+		&-tabs-item
+
+			svg
+				fill: white-hint
+
+			&--active svg
+				fill: white-text
+
+		&-info
+			color: white-text
+
+	&__workspace-content
+		position: absolute
+		left: 0
+		right: 0
+		bottom: 0
+		top: 46px
+		overflow-y: auto
+		padding: base-hs

@@ -1,0 +1,245 @@
+.{prefix}-MessageRoom
+	position: absolute
+	top: 0
+	left: 0
+	height: 100%
+	width: 100%
+
+	&__header
+		position: absolute
+		top: 0
+		right: 0
+		left: 0
+		height: topbar-height
+		background-color: #FFFFFF
+		overflow: hidden
+		z-index: 80
+
+		&-collapse
+			position: absolute
+			left: base-hs
+			top: 50%
+			margin-top: -12px
+			cursor: pointer
+			transition: left 175ms ease
+
+			svg
+				fill: black-secondary
+				display: inline-block
+				vertical-align: middle
+
+		&-info
+			position: absolute
+			left: base-hs + 40px
+			top: 50%
+			margin-top: -7px
+			transition: left 175ms ease
+			cursor: pointer
+
+			h4
+				font-size: em(15px)
+				line-height: 1
+				display: block
+				font-weight: 500
+
+		&-tabs
+			position: absolute
+			top: 50%
+			margin-top: -12px
+			right: 0
+
+			&-item
+				display: inline-block
+				cursor: pointer
+				margin-right: base-hs
+
+				svg
+					fill: black-hint
+					display: inline-block
+					vertical-align: middle
+
+				&--active svg
+					fill: black-secondary
+
+	&__no-messages
+		padding: base-vs base-hs
+		font-weight: 500
+		color: black-hint
+
+	&__group-settings
+		position: absolute
+		padding: base-vs base-hs
+		top: topbar-height
+		bottom: 0
+		left: 0
+		right: 0
+		overflow-y: auto
+
+		&-section
+			margin-bottom: base-vs
+			position: relative
+
+			label
+				position: absolute
+				top: 0
+				left: 0
+				color: black-hint
+				font-size: em(12px)
+				transition: color 175ms ease
+
+			button
+				border: 0
+				background-color: transparent
+				display: block
+				position: absolute
+				right: 0
+				bottom: 4px
+
+				svg
+					fill: black-hint
+					display: block
+
+			input
+				border: 0
+				border-bottom: 1px solid black-dividers
+				padding: round(2.5 * base-vs) 0 base-vs 0
+				font-size: em(14px)
+				display: block
+				width: 100%
+				margin: 0 0 base-vs 0
+				transition: border-color 175ms ease
+
+				&:focus
+					outline: 0
+					border-color: brand-primary
+
+				&:focus ~ label
+					color: brand-primary
+
+				&:focus ~ button svg
+					fill: brand-primary
+
+				&::placeholder
+					color: black-secondary
+
+	&__mod-settings
+		&-header
+			padding: base-vs base-hs
+			margin-bottom: base-vs
+			border-bottom: 1px solid black-dividers;
+
+		&-section
+			margin-bottom: round(base-vs * 4)
+
+		&-section-header
+			font-weight: bold
+			font-size: 1.1em
+			margin-bottom: 5px
+
+		&-status-active
+			border-left: 5px solid #4EB34E
+			padding-left: 10px
+			margin-top: base-vs
+
+		&-status-inactive
+			border-left: 5px solid #B34E4E
+			padding-left: 10px
+			margin-top: base-vs
+
+		&-userlist
+			margin: base-vs base-hs
+
+			td
+				padding: 3px 10px
+
+			input, button
+				padding: 3px 5px
+
+	&__thread
+		position: absolute
+		left: 0
+		right: 0
+		bottom: 55px
+		top: topbar-height
+		overflow-y: auto
+
+		&--time-separator
+			text-align: center
+			font-size: 0.8em
+			font-weight: bold
+			font-style: italic
+			margin: 6px
+			color: black-secondary
+
+	&__footer
+		background-color: alpha(#000000, 6%)
+		border-top: 1px solid black-dividers
+		position: absolute
+		left: 0
+		right: 0
+		bottom: 0
+		height: 55px
+
+		button
+			border: 0
+			background-color: transparent
+			display: block
+			position: absolute
+			right: base-hs * 2
+			top: 50%
+			margin: 0
+			margin-top: -12px
+			padding: 0
+			box-shadow: none
+			height: auto
+
+			svg
+				fill: black-hint
+				display: block
+
+		input
+			position: absolute
+			top: 50%
+			margin-top: -17px
+			left: base-hs
+			width: "calc(100% - 2 * %s)" % base-hs
+			border: 0
+			border: 2px solid black-dividers
+			padding: 0 (24px + 2 * base-hs) 0 base-hs
+			height: 34px
+			font-size: em(14px)
+			display: block
+			border-radius: 3px
+
+			&:focus
+				outline: 0
+
+			&:focus ~ button svg
+				fill: brand-primary
+
+			&::placeholder
+				color: black-hint
+
+	&__autocomplete
+		position: absolute
+		background: #F0F0F0
+		color: black-text
+		border: 1px solid #D1D1D1
+		border-bottom-width: 0
+		bottom: 55px /* height of the __footer */
+		left: base-hs
+		width: 40%
+		padding: 0;
+		overflow-y: auto;
+		max-height: 50%;
+
+		&-message
+			padding: 6px 16px
+
+		&-item
+			padding: 6px 16px
+			cursor: pointer
+
+			&--selected, &:hover
+				background: #FF5722
+				color: white-text
