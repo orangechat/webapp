@@ -2,6 +2,8 @@
 
 It's a chat for subreddits.
 
+### Status
+The project has been morphing around into different things until it has settled into its current state. It is now currently being tidied up and documented so that other developers can understand how everything is put together.
 
 ### Embedding into reddit.com
 
@@ -14,7 +16,7 @@ The main place this will be used it emebedded into https://reddit.com. This mean
 
 ### Tools, libraries and frameworks
 
-* mithril.js framework for it's low footprint and performance
+* mithril.js framework for it's low footprint (with MSX for views)
 * SockJS websocket library
 
 Already in use on reddit.com that we may re-use:
