@@ -5,6 +5,8 @@ It's a chat for subreddits.
 ### Status
 The project has been morphing around into different things until it has settled into its current state. It is now currently being tidied up and documented so that other developers can understand how everything is put together.
 
+This is only the frontend to orangechat that you may run locally to contribute to the project.
+
 ### Embedding into reddit.com
 
 The main place this will be used it emebedded into https://reddit.com. This means:
