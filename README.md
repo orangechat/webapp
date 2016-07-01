@@ -29,12 +29,12 @@ Need events? Backbone.Events
 
 ### Development
 
-This repo comes with a local development server that may be used to test out the frontend during development.
+This repository comes with a local development server that may be used to test out the frontend during development.
 
 Usage: `npm start` or `PORT=8080 npm start` to specify the port.
 
-The frontend still communicates to app.orangechat.io production services so to make things easier we have whitelisted common
-development hostnames. You may access the development server at either `127.0.0.1` or any hostname ending in `.local` if you add it to your hosts file.
+The frontend communicates to app.orangechat.io production services using CORS, so to make things easier we have whitelisted common
+development hostnames. You may access the development server at either `127.0.0.1` or any hostname ending in `.local` if you add it to your hosts file. Both HTTP/HTTPS and any port are supported.
 
 To build your changes, run `npm run build`.
 
