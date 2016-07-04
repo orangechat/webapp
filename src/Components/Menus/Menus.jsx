@@ -72,7 +72,7 @@ Menus.view = function(controller) {
 
 	return (
 		<div class="OC-Menu" style={style_tag}>
-			<h5 class="OC-Menu__title">title</h5>
+			<h5 class="OC-Menu__title">{title}</h5>
 			{controller.active_menu.view()}
 		</div>
 	);
