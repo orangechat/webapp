@@ -180,18 +180,22 @@
 		bottom: 0
 		height: 55px
 
-		button
-			border: 0
-			background-color: transparent
+		button[type="submit"]
+			border: none !important
+			background: none !important
 			display: block
 			position: absolute
 			right: base-hs * 2
 			top: 50%
 			margin: 0
 			margin-top: -12px
-			padding: 0
+			padding: 0 !important
 			box-shadow: none
 			height: auto
+			min-width: inherit
+
+			:hover
+				background: none !important
 
 			svg
 				fill: black-hint
