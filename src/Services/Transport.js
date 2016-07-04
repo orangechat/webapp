@@ -4,6 +4,7 @@ var MESSAGE_TYPE_JOIN = '01';
 var MESSAGE_TYPE_LEAVE = '02';
 var MESSAGE_TYPE_MESSAGE = '03';
 var MESSAGE_TYPE_GROUPMETA = '04';
+var MESSAGE_TYPE_TAGCOUNTS = '08';
 
 class Transport {
 
@@ -111,7 +112,7 @@ class Transport {
 	}
 
 	updateGroupMeta() {
-		this.queue.push(MESSAGE_TYPE_GROUPMETA);
+		this.queue.push(MESSAGE_TYPE_TAGCOUNTS);
 		this.flushSocket();
 	}
 
