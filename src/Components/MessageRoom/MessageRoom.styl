@@ -159,7 +159,7 @@
 		position: absolute
 		left: 0
 		right: 0
-		bottom: 55px
+		bottom: 45px /* height of the __footer */
 		top: topbar-height
 		overflow-y: auto
 
@@ -178,7 +178,7 @@
 		left: 0
 		right: 0
 		bottom: 0
-		height: 55px
+		height: 45px
 
 		button[type="submit"]
 			border: none !important
@@ -205,8 +205,8 @@
 			position: absolute
 			top: 50%
 			margin-top: -17px
-			left: base-hs
-			width: "calc(100% - 2 * %s)" % base-hs
+			left: (base-hs / 2)
+			width: "calc(100% - 2 * %s)" % (base-hs / 2)
 			border: 0
 			border: 2px solid black-dividers
 			padding: 0 (24px + 2 * base-hs) 0 base-hs
@@ -230,7 +230,7 @@
 		color: black-text
 		border: 1px solid #D1D1D1
 		border-bottom-width: 0
-		bottom: 55px /* height of the __footer */
+		bottom: 45px /* height of the __footer */
 		left: base-hs
 		width: 40%
 		padding: 0;
