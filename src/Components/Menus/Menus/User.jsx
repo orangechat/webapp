@@ -171,7 +171,7 @@ UserMenu.viewModAction = function(controller) {
 		}, 'Ban user')
 	];
 
-	if(false && ModeratorToolbox.isActive()) {
+	if(window.tb_oc && ModeratorToolbox.isActive()) {
 		// TODO: Hacky way to get just the sub name, rethink this
 		var subreddit_name = (controller.room.name() || '')
 			.replace('reddit_sub_', '')
