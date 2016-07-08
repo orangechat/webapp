@@ -189,7 +189,7 @@ UserMenu.viewModAction = function(controller) {
 			        
 			        <a
 			        	href="javascript:;"
-			        	class="OC-Panel__link user-history-button"
+			        	class="OC-Menu__link user-history-button"
 			        	title="view user history"
 			        	onclick={controller.toolboxShowUser}
 			        >
@@ -201,7 +201,7 @@ UserMenu.viewModAction = function(controller) {
 			        	class={'usernote-button usernote-span-' + subreddit_name}
 			        >
 			            <a
-			            	class={'OC-Panel__link add-user-tag-' + subreddit_name}
+			            	class={'OC-Menu__link add-user-tag-' + subreddit_name}
 			            	id="add-user-tag"
 			            	href="javascript:;"
 			            	onclick={controller.toolboxShowUser}
