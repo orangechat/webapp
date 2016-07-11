@@ -190,7 +190,7 @@ Sidebar.viewChannelListItem = function(controller, channel, opts) {
 		item_classes += ' OC-Sidebar__channels-item--sub-channel';
 	}
 
-	var num_users_text = channel.instance.num_users();
+	var num_users_text = channel.instance.num_users() + channel.instance.known_irc_usernames().length;
 	num_users_text = num_users_text === 1 ?
 		num_users_text + ' person here' :
 		num_users_text + ' people here';

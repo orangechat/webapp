@@ -33,6 +33,7 @@ MessageRoom.controller = function(args) {
 	this.current_message = m.prop('');
 	this.num_users = m.prop(0);
 	this.known_usernames = m.prop([]);
+	this.known_irc_usernames = m.prop([]);
 	this.bus = args.bus;
 	this.room_manager = args.room_manager;
 	this.orangechat = Orangechat.instance();
@@ -148,6 +149,15 @@ MessageRoom.controller = function(args) {
 
 			if (this.known_usernames().indexOf(new_message.author.toLowerCase())  === -1) {
 				this.known_usernames().push(new_message.author.toLowerCase());
+			}
+
+			// Temporary way to get a rough number of active IRC users to be added to
+			// the user count for this channel
+			if (new_message.source === 'irc') {
+				let irc_usernames = this.known_irc_usernames();
+				if (irc_usernames.indexOf(new_message.author.toLowerCase()) === -1) {
+					irc_usernames.push(new_message.author.toLowerCase());
+				}
 			}
 		}
 
