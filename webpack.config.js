@@ -3,10 +3,21 @@ var poststylus = require('poststylus');
 var path = require('path')
 
 module.exports = {
+	devServer: {
+		contentBase: 'public',
+		host: process.env.HOST || '127.0.0.1',
+		port: process.env.PORT || 8000,
+		stats: {
+			colors: true
+		},
+		noInfo: true,
+		inline: true
+	},
 	devtool: 'source-map',
 	entry: path.resolve(__dirname, 'src'),
 	output: {
 		path: 'public/builds/',
+		publicPath: '/builds/',
 		filename: 'bundle.js'
 	},
 	module: {
@@ -39,8 +50,8 @@ module.exports = {
 		]
 	},
 	plugins: [
-    new webpack.ProvidePlugin({
-	    m: 'mithril'
+		new webpack.ProvidePlugin({
+			m: 'mithril'
 		})
-  ]
+	]
 }
