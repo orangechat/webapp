@@ -20,6 +20,12 @@ module.exports = {
 		publicPath: '/builds/',
 		filename: 'bundle.js'
 	},
+	resolve: {
+		extensions: ['', '.js', '.jsx'],
+		root: [
+			path.resolve(__dirname, 'src')
+		]
+	},
 	module: {
 		loaders: [
 			{
