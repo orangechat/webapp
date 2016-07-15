@@ -1,10 +1,14 @@
 import './Message.styl';
 
 import * as Helpers from '../../Helpers/Helpers.js';
+import Embed from './embed.js';
 
 var Message = {};
 
 Message.controller = function(args) {
+	// The currently embeded media
+	this.embed = null;
+
 	this.cssClass = () => {
 		var css_class = 'OC-Message';
 		if (args.message.author === args.message_room.orangechat.username()) {
@@ -28,6 +32,25 @@ Message.controller = function(args) {
 		args.message_room.openUserMenu(event, args.message.author, {
 			source: args.message.source
 		});
+	};
+
+	this.onMessageClick = (event) => {
+		// Clicking the embed link/media button
+		if(event.target.className === 'OC-Message__content--embed') {
+			var el = event.target;
+
+			// < IE11 does not support el.dataset, el.getAttribute works in all cases
+			var url = el.getAttribute('data-url');
+			var embed_type = el.getAttribute('data-embed-type');
+			var embed = _.findWhere(Embed.all, {name: embed_type});
+			if (embed) {
+				this.embed = Helpers.subModule(embed, {url: url});
+			}
+		}
+	};
+
+	this.closeEmbed = () => {
+		this.embed = null;
 	};
 };
 
@@ -67,7 +90,7 @@ Message.viewInline = function(controller, args, ext) {
 	}
 
 	return (
-	<li class={controller.cssClass() + ' OC-Message--inline'}>
+	<li class={controller.cssClass() + ' OC-Message--inline'} key={args.message.id} onclick={controller.onMessageClick}>
 		<div
 			style={args.message.type === 'action' ? 'color:' + Helpers.nickColour(args.message.author) + ';' : ''}
 			class="OC-Message__content"
@@ -82,6 +105,7 @@ Message.viewInline = function(controller, args, ext) {
 			{m.trust(args.message.display.content)}
 		</div>
 		{error}
+		{Message.viewEmbed(controller, args, ext)}
 	</li>
 	);
 };
@@ -110,7 +134,7 @@ Message.viewBlock = function(controller, args, ext) {
 	}
 
 	return (
-	<li class={controller.cssClass() + ' OC-Message--block'} key={args.message.id}>
+	<li class={controller.cssClass() + ' OC-Message--block'} key={args.message.id} onclick={controller.onMessageClick}>
 		<a
 			class="OC-Message__author"
 			style={'color:' + Helpers.nickColour(args.message.author) + ';'}
@@ -128,8 +152,26 @@ Message.viewBlock = function(controller, args, ext) {
 			{m.trust(args.message.display.content)}
 		</div>
 		{error}
+		{Message.viewEmbed(controller, args, ext)}
 	</li>
 	);
 };
+
+Message.viewEmbed = function(controller, args, ext) {
+	if (!controller.embed) {
+		return;
+	}
+
+	return (
+		<div class="OC-Message__content--embed-wrapper">
+			<a class="OC-link OC-Message__content--embed-close" onclick={controller.closeEmbed}>
+				<svg class="" width="24" height="24" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+			</a>
+			<div class="OC-Message__content--embed-content">
+				{controller.embed.view()}
+			</div>
+		</div>
+	);
+}
 
 export default Message;

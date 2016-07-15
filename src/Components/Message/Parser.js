@@ -1,5 +1,6 @@
 import strftime from 'strftime';
-import * as Helpers from '../Helpers/Helpers.js';
+import * as Helpers from '../../Helpers/Helpers.js';
+import Embed from './embed.js';
 
 /**
  * Parse messages into displayable formats. Parses URLs, embedded media, etc.
@@ -57,7 +58,8 @@ class MessageParser {
 
 		parsed_url = word.replace(/^(([A-Za-z][A-Za-z0-9\-]*\:\/\/)|(www\.))([\w\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF.\-]+)([a-zA-Z]{2,6})(:[0-9]+)?(\/[\w\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF!:.?$'()[\]*,;~+=&%@!\-\/]*)?(#.*)?$/gi, function (url) {
 			var nice = url,
-				extra_html = '';
+				extra_html = '',
+				embed_type;
 
 			// Don't allow javascript execution
 			if (url.match(/^javascript:/i)) {
@@ -74,6 +76,16 @@ class MessageParser {
 			// Shorten the displayed URL if it's going to be too long
 			if (nice.length > 100) {
 				nice = nice.substr(0, 100) + '...';
+			}
+
+			// Check if we can embed this URL
+			embed_type = _.find(Embed.all, (embed) => {
+				if (embed.match(url)) {
+					return embed;
+				}
+			});
+			if (embed_type) {
+				extra_html += '<a class="OC-Message__content--embed" data-url="' + url.replace(/"/g, '%22') + '" data-embed-type="' + embed_type.name + '">&gt;</a>';
 			}
 
 			// Make the link clickable

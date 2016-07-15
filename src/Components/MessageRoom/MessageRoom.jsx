@@ -7,7 +7,7 @@ import Orangechat from '../../Services/Orangechat.js';
 import AutoComplete from './AutoComplete.jsx';
 import MessageModel from '../Message/Model.js';
 import Message from '../Message/Message.jsx';
-import MessageParser from '../../Services/MessageParser.js';
+import MessageParser from '../Message/Parser.js';
 import * as Notifications from '../../Services/Notifications.js';
 
 import Menus from '../Menus/Menus.jsx';

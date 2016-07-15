@@ -5,6 +5,42 @@
 	word-wrap: break-word
 	position: relative
 
+	&__content
+		&--embed
+			padding: 0 0.5em
+			color: #006d9a
+			cursor: pointer
+			transform: scale(0.7, 1)
+			display: inline-block
+			font-weight: bold
+
+		&--embed-wrapper
+			overflow: hidden
+			position: relative
+			left: -(base-hs)
+			margin-right: -(base-hs * 2)
+			background: #fff
+			border: 3px solid #ff5722
+			border-width: 3px 0
+			margin-top: base-vs
+			padding: base-vs 0
+
+		&--embed-content
+			clear: both
+
+		&--embed-loading
+			display: block
+			text-align: center
+			text-decoration: none
+			color: black-text
+			cursor: default
+
+		&--embed-close
+			top: base-vs
+			right: base-hs
+			position: absolute
+			z-index: 1
+
 	&--highlight
 		background-color: #FBE9E7
 
