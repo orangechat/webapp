@@ -94,6 +94,18 @@ Sidebar.controller = function(args) {
 	};
 };
 
+/**
+ * Organise the channel list into a structured list
+ * Eg.
+ * * Top level channel
+ * * Top level channel
+ *   * Sub channel
+ * * Sub channel without a parent
+ *
+ * People may link directly to a subchannel such as #/r/live-rnc without joining its
+ * parent channel, so these must then be treated like a top level channel until they
+ * do join the parent channel.
+ */
 Sidebar.view = function(controller) {
 	var channels = [];
 	var sub_channels = Object.create(null);
@@ -104,7 +116,7 @@ Sidebar.view = function(controller) {
 		var chan = channel.instance;
 		var parent_chan_name;
 
-		// Main channels don't have a parent
+		// Main channels don't have a parent channel
 		if (!chan.linked_channels.parent) {
 			channels.push(channel);
 		} else {
@@ -117,13 +129,34 @@ Sidebar.view = function(controller) {
 	// Add each channel entry to the list, followed by its subchannels
 	if (channels.length > 0) {
 		_.each(channels, function(channel, idx) {
+			var this_chans_subchannels = sub_channels[channel.instance.transportSafeRoomName()] || [];
+
+			// The parent channel...
 			list.push(Sidebar.viewChannelListItem(controller, channel));
-			_.each(sub_channels[channel.instance.transportSafeRoomName()], function(channel) {
+
+			// The channels subchannels...
+			_.each(this_chans_subchannels, function(channel) {
 				list.push(Sidebar.viewChannelListItem(controller, channel, {
 					subchannel: true
 				}));
 			});
+
+			this_chans_subchannels.added_to_list = true;
 		});
+
+		// Add any remaning subchannels that haven't already been added
+		_.each(sub_channels, function(sub_channels, parent_chan_name) {
+			if (sub_channels.added_to_list) {
+				return;
+			}
+
+			_.each(sub_channels, function (channel) {
+				list.push(Sidebar.viewChannelListItem(controller, channel, {
+					//subchannel: true
+				}));
+			});
+		});
+
 	} else {
 		list.push(<p>You're not in any channels yet</p>);
 	}
