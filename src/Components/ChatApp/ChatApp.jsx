@@ -360,9 +360,7 @@ ChatApp.view = function(controller) {
 
 	if (controller.state('is_open')) {
 		content.push(
-			<div class="OC__shadow-underlay">
-				<div class="OC__shadow-underlay-inner"></div>
-			</div>
+			<div class="OC__shadow-underlay"></div>
 		);
 
 		if(controller.orangechat.username()) {

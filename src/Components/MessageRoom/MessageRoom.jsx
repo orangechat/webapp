@@ -14,6 +14,7 @@ import Menus from '../Menus/Menus.jsx';
 import UserMenu from '../Menus/Menus/User.jsx';
 import ModerationMenu from '../Menus/Menus/Moderation.jsx';
 
+import Alert from './Views/Alert.jsx';
 import GroupSettings from './Views/GroupSettings.js';
 import ModSettings from './Views/ModSettings.jsx';
 
@@ -38,6 +39,7 @@ MessageRoom.controller = function(args) {
 	this.room_manager = args.room_manager;
 	this.orangechat = Orangechat.instance();
 	this.message_parser = new MessageParser(null, this.known_usernames);
+	this.alerts = [];
 
 	this.access = args.access || {
 		is_reddit_mod: false,
@@ -215,6 +217,7 @@ MessageRoom.controller = function(args) {
 
 	this.bus.on('message.channel.meta', (message) => {
 		var do_redraw = false;
+		var alert = null;
 
 		if (message.target !== this.transportSafeRoomName()) {
 			return;
@@ -230,6 +233,11 @@ MessageRoom.controller = function(args) {
 		}
 		if (message.irc) {
 			this.linked_channels.irc = message.irc;
+			alert = Helpers.subModule(Alert, {
+				irc_channel: message.irc
+			});
+			alert.instance.destroyIn(7000);
+			this.alerts.push(alert);
 		}
 
 		if (do_redraw) {
@@ -479,8 +487,6 @@ MessageRoom.controller = function(args) {
 };
 
 MessageRoom.view = function(controller) {
-	var header = MessageRoom.viewHeader(controller);
-
 	var room_content = [];
 
 	room_content.push(controller.menu_container.view());
@@ -492,11 +498,18 @@ MessageRoom.view = function(controller) {
 	}
 
 	return (
-		<div class="OC-MessageRoom">
-			{header}
+		<div class="OC-MessageRoom" key={controller.name()}>
+			{MessageRoom.viewHeader(controller)}
+			{MessageRoom.viewAlerts(controller)}
 			{room_content}
 		</div>
 	);
+};
+
+MessageRoom.viewAlerts = function(controller) {
+	return _.map(controller.alerts, (alert) => {
+		return alert.view();
+	});
 };
 
 MessageRoom.viewChat = function(controller) {

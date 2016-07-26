@@ -247,3 +247,42 @@
 			&--selected, &:hover
 				background: #FF5722
 				color: white-text
+
+	&__alert
+		position: absolute
+		top: topbar-height
+		right: 0
+		z-index: 1
+		background: #fff
+		padding: base-vs
+		width: auto;
+		max-width: 70%
+		overflow: hidden
+		transition: 1s
+		box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2)
+
+		&--header
+			font-weight: bold
+			cursor: pointer
+
+		&--body
+			display: none
+
+		&--footer
+			display: none
+
+		&--close
+			display: inline-block
+			margin-top: base-vs
+
+	&__alert--destroy
+		height: 0
+		padding: 0 base-vs
+
+	&__alert--open
+		width: 300px;
+
+		.{prefix}-MessageRoom__alert--body,
+		.{prefix}-MessageRoom__alert--footer
+			display: block
+
