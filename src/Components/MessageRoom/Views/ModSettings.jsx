@@ -92,6 +92,7 @@ ModSettings.view = function(controller) {
 				<a class="OC-button__dark" onclick={controller.close}>Close</a>
 			</div>
 			{ModSettings.viewFloodControl(controller)}
+			{ModSettings.viewIrcLink(controller)}
 			{ModSettings.viewBanlist(controller)}
 		</div>
 	);
@@ -192,6 +193,11 @@ ModSettings.viewOperators = function(controller) {
 };
 
 ModSettings.viewIrcLink = function(controller) {
+	var irc_channel = controller.room.linked_channels.irc;
+	var status = irc_channel ?
+		(<div class="OC-MessageRoom__mod-settings-status-active">Active - {irc_channel}</div>) :
+		(<div class="OC-MessageRoom__mod-settings-status-inactive">Disabled</div>);
+
 	return (
 		<div class="OC-MessageRoom__mod-settings-section">
 			<div class="OC-MessageRoom__mod-settings-section-header">IRC link</div>
@@ -201,7 +207,7 @@ ModSettings.viewIrcLink = function(controller) {
 				<li>orangechat users will appear on IRC when they start talking</li>
 				<li>Anybody logged into orangechat and has access to the subreddit will see the IRC channel messages</li>
 			</ul>
-			<div class="OC-MessageRoom__mod-settings-status-inactive">Disabled</div>
+			{status}
 		</div>
 	);
 };

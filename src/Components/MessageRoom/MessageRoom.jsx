@@ -228,6 +228,9 @@ MessageRoom.controller = function(args) {
 			this.linked_channels.parent = message.parent;
 			do_redraw = true;
 		}
+		if (message.irc) {
+			this.linked_channels.irc = message.irc;
+		}
 
 		if (do_redraw) {
 			m.redraw();
