@@ -56,7 +56,7 @@ Alert.view = function(controller, args) {
 		<div class={css_class}>
 			<a class="OC-MessageRoom__alert--header" onclick={controller.toggle}>Access via IRC!</a>
 			<div class="OC-MessageRoom__alert--body">
-				Enjoy IRC? You can access this channel via <a href={'irc://irc.snoonet.org/' + args.irc_channel}>irc.snoonet.org/{args.irc_channel}</a>
+				Enjoy IRC? You can access this channel via <a class="OC-link" href={'irc://irc.snoonet.org/' + args.irc_channel}>irc.snoonet.org/{args.irc_channel}</a>
 			</div>
 			<div class="OC-MessageRoom__alert--footer">
 				<a class="OC-button__dark OC-MessageRoom__alert--close" onclick={controller.destroy}>Close</a>
