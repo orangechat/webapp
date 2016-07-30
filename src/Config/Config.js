@@ -3,6 +3,9 @@ var config = {
 		embedly: {
 			api_key: ''
 		}
+	},
+	channels: {
+		default: ['/r/OrangeChat']
 	}
 };
 

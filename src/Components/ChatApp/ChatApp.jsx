@@ -1,6 +1,7 @@
 import './ChatApp.styl';
 
 import * as Helpers from '../../Helpers/Helpers.js';
+import Config from 'Config/Config';
 
 import Sidebar from '../Sidebar/Sidebar.jsx';
 import Topbar from '../Topbar/Topbar.js';
@@ -122,7 +123,7 @@ ChatApp.controller = function(args) {
 
 	// Once we're ready (logged in, app is ready) then we show the active rooms
 	this.addInitialRooms = () => {
-		var default_channel = '/r/OrangeChat';
+		var default_channel = Config.channels.default;
 		var channel_list = this.state.get('channel_list') || [];
 		var active_channel = this.state.get('active_channel');
 		var channel_in_url = (!this.is_in_reddit && window.location.hash) ?
@@ -130,7 +131,9 @@ ChatApp.controller = function(args) {
 			null;
 
 		if (!channel_list.length) {
-			this.rooms.createRoom(default_channel);
+			_.each([].concat(default_channel), (channel_name) => {
+				this.rooms.createRoom(channel_name);
+			});
 		} else {
 			_.each(channel_list, (channel_state) => {
 				// Upgrade the list of string based channel names from older OC versions to objects
