@@ -29,6 +29,9 @@ var ACCESS_TYPE_REDDIT_MOD = 3;
 var MessageRoom = {};
 
 MessageRoom.controller = function(args) {
+	// Some consts..
+	this.FLAG_ALERT_IRC = 'alert_irc';
+
 	this.name = m.prop(args.name);
 	this.label = m.prop(args.label);
 	this.current_message = m.prop('');
@@ -49,6 +52,9 @@ MessageRoom.controller = function(args) {
 
 	// Associated channels such as the mod only channel
 	this.linked_channels = args.linked_channels || {};
+
+	// Misc. flags that may be set
+	this.flags = args.flags || {};
 
 	this.is_active = false;
 	this.messages = m.prop([
@@ -93,6 +99,23 @@ MessageRoom.controller = function(args) {
 		var last_message = _.last(this.messages());
 		if (last_message) {
 			this.read_upto = last_message.data.created;
+		}
+	};
+
+	// To keep storage space at a minimum, wrap handling of flags to make sure
+	// they get deleted properly when needed.
+	// Delete a flag: flag(FLAG_ALERT_IRC, null)
+	// Set a flag: flag(FLAG_ALERT_IRC, true);
+	// Get a flag: flag(FLAG_ALERT_IRC);
+	this.flag = (flag_name, flag_val) => {
+		if (typeof flag_val !== 'undefined') {
+			if (flag_val === null) {
+				delete this.flags[flag_name];
+			} else {
+				this.flags[flag_name] = flag_val;
+			}
+		} else {
+			return this.flags[flag_name];
 		}
 	};
 
@@ -233,11 +256,15 @@ MessageRoom.controller = function(args) {
 		}
 		if (message.irc) {
 			this.linked_channels.irc = message.irc;
-			alert = Helpers.subModule(Alert, {
-				irc_channel: message.irc
-			});
-			alert.instance.destroyIn(7000);
-			this.alerts.push(alert);
+
+			if (!this.flag(this.FLAG_ALERT_IRC)) {
+				alert = Helpers.subModule(Alert, {
+					channel: this,
+					irc_channel: message.irc
+				});
+				alert.instance.destroyIn(7000);
+				this.alerts.push(alert);
+			}
 		}
 
 		if (do_redraw) {

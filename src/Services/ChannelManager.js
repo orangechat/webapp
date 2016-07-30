@@ -5,6 +5,7 @@ class ChannelManager {
 	constructor(opts) {
 		this.bus = opts.bus;
 		this.transport = opts.transport;
+		this.state = opts.state;
 		this.rooms = [];
 		this.active = m.prop(null);
 
@@ -67,6 +68,7 @@ class ChannelManager {
 				read_upto: args.read_upto,
 				access: args.access,
 				linked_channels: args.linked_channels,
+				flags: args.flags,
 				bus: this.bus,
 				room_manager: this
 			});

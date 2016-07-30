@@ -42,7 +42,8 @@ ChatApp.controller = function(args) {
 
 	this.rooms = new ChannelManager({
 		bus: this.bus,
-		transport: this.transport
+		transport: this.transport,
+		state: this.state
 	});
 
 	// The subreddits we are subscribed to
@@ -143,7 +144,8 @@ ChatApp.controller = function(args) {
 					label: channel_state.label,
 					read_upto: channel_state.read_upto || 0,
 					access: channel_state.access,
-					linked_channels: channel_state.linked_channels
+					linked_channels: channel_state.linked_channels,
+					flags: channel_state.flags
 				});
 			});
 		}
@@ -181,7 +183,8 @@ ChatApp.controller = function(args) {
 				label: channel.instance.label(),
 				read_upto: channel.instance.read_upto,
 				access: channel.instance.access,
-				linked_channels: channel.instance.linked_channels
+				linked_channels: channel.instance.linked_channels,
+				flags: channel.instance.flags
 			};
 		});
 
