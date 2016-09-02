@@ -8,6 +8,7 @@ import AutoComplete from './AutoComplete.jsx';
 import MessageModel from '../Message/Model.js';
 import Message from '../Message/Message.jsx';
 import MessageParser from '../Message/Parser.js';
+import Nicklist from '../Nicklist/Nicklist.jsx';
 import * as Notifications from '../../Services/Notifications.js';
 
 import Menus from '../Menus/Menus.jsx';
@@ -80,6 +81,14 @@ MessageRoom.controller = function(args) {
 	this.menu_container = Helpers.subModule(Menus, {
 		bus: this.bus
 	});
+
+	this.nicklist = Helpers.subModule(Nicklist, {
+		channel: this
+	});
+	this.is_nicklist_open = false;
+
+	// Tabs in the top right. When hidden, a 'Back to chat' button is shown instead
+	this.header_tabs_hidden = false;
 
 	// A component instance that gets rendered instead of the message thread
 	this.open_panel = null;
@@ -511,6 +520,22 @@ MessageRoom.controller = function(args) {
 			room_manager: this.room_manager
 		});
 	};
+
+	this.openNicklist = () => {
+		this.is_nicklist_open = true;
+		m.redraw();
+	};
+
+	this.closeNicklist = () => {
+		this.is_nicklist_open = false;
+		m.redraw();
+	};
+
+	this.toggleNicklist = () => {
+		this.is_nicklist_open ?
+			this.closeNicklist() :
+			this.openNicklist();
+	};
 };
 
 MessageRoom.view = function(controller) {
@@ -604,6 +629,8 @@ MessageRoom.viewChat = function(controller) {
 			{thread_items}
 		</ul>,
 
+		controller.is_nicklist_open ? controller.nicklist.view() : null,
+
 		controller.auto_complete ? controller.auto_complete.view() : null,
 
 		<form class="OC-MessageRoom__footer" onsubmit={controller.onFormSubmit.bind(controller)}>
@@ -668,23 +695,9 @@ MessageRoom.viewHeader = function(controller) {
 				class={'OC-MessageRoom__header-tabs-item' + (controller.open_panel ? ' OC-MessageRoom__header-tabs-item--active' : '')}
 				onclick={controller.openGroupSettings}
 			>
-				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-					<path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"></path>
-				</svg>
-			</li>
-		);
-	}
-
-	// Insert a tab to open the chat view again if there are any other options
-	if(tabs.length > 0) {
-		tabs.unshift(
-			<li
-				class={'OC-MessageRoom__header-tabs-item' + (!controller.open_panel ? ' OC-MessageRoom__header-tabs-item--active' : '')}
-				onclick={controller.openChat}
-			>
-				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-					<path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"></path>
-				</svg>
+				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" x="0px" y="0px" viewBox="10 10 80 80">
+					<path d="M57.2,48c0-2.5-0.9-4.7-2.7-6.5c-1.8-1.8-4-2.7-6.5-2.7s-4.7,0.9-6.5,2.7 c-1.8,1.8-2.7,4-2.7,6.5s0.9,4.7,2.7,6.5c1.8,1.8,4,2.7,6.5,2.7s4.7-0.9,6.5-2.7C56.3,52.7,57.2,50.5,57.2,48z M75.5,44.1V52 c0,0.3-0.1,0.6-0.3,0.8c-0.2,0.3-0.4,0.4-0.7,0.5l-6.6,1c-0.5,1.3-0.9,2.4-1.4,3.3c0.8,1.2,2.1,2.8,3.8,4.9 c0.2,0.3,0.4,0.6,0.4,0.9c0,0.3-0.1,0.6-0.3,0.8c-0.6,0.9-1.8,2.2-3.5,3.9c-1.7,1.7-2.8,2.5-3.4,2.5c-0.3,0-0.6-0.1-0.9-0.3 l-4.9-3.9c-1.1,0.5-2.1,1-3.3,1.4c-0.4,3.2-0.7,5.5-1,6.7c-0.2,0.7-0.6,1-1.3,1H44c-0.3,0-0.6-0.1-0.9-0.3 c-0.3-0.2-0.4-0.5-0.4-0.8l-1-6.6c-1.2-0.4-2.2-0.8-3.2-1.3l-5,3.8c-0.2,0.2-0.5,0.3-0.9,0.3c-0.3,0-0.6-0.1-0.9-0.4 c-3-2.7-5-4.7-5.9-6c-0.2-0.2-0.3-0.5-0.3-0.8c0-0.3,0.1-0.6,0.3-0.8c0.4-0.5,1-1.3,1.8-2.4c0.9-1.1,1.5-1.9,1.9-2.5 c-0.6-1.2-1.1-2.4-1.5-3.5l-6.6-1c-0.3,0-0.6-0.2-0.8-0.4c-0.2-0.3-0.3-0.5-0.3-0.8V44c0-0.3,0.1-0.6,0.3-0.8 c0.2-0.3,0.4-0.4,0.7-0.5l6.7-1c0.3-1.1,0.8-2.2,1.4-3.3c-1-1.4-2.2-3-3.8-4.9c-0.2-0.3-0.4-0.6-0.4-0.9c0-0.2,0.1-0.5,0.3-0.8 c0.6-0.9,1.8-2.1,3.5-3.8c1.7-1.7,2.9-2.6,3.4-2.6c0.3,0,0.6,0.1,0.9,0.4l4.9,3.8c1.1-0.5,2.1-1,3.3-1.4c0.4-3.2,0.7-5.5,1-6.7 c0.2-0.7,0.6-1,1.3-1H52c0.3,0,0.6,0.1,0.9,0.3c0.3,0.2,0.4,0.5,0.4,0.8l1,6.6c1.2,0.4,2.2,0.8,3.2,1.3l5.1-3.8 c0.2-0.2,0.5-0.3,0.9-0.3c0.3,0,0.6,0.1,0.9,0.4c3.1,2.8,5,4.9,5.9,6.1c0.2,0.2,0.3,0.5,0.3,0.8c0,0.3-0.1,0.6-0.3,0.8 c-0.4,0.5-1,1.3-1.8,2.4c-0.9,1.1-1.5,1.9-1.9,2.5c0.6,1.2,1.1,2.4,1.5,3.5l6.6,1c0.3,0,0.6,0.2,0.8,0.4 C75.4,43.5,75.5,43.8,75.5,44.1z"></path>
+				</svg> 
 			</li>
 		);
 	}
@@ -698,6 +711,17 @@ MessageRoom.viewHeader = function(controller) {
 			</li>
 		);
 	}
+
+	tabs.push(
+		<li
+			class="OC-MessageRoom__header-tabs-item"
+			onclick={controller.toggleNicklist}
+		>
+			<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+				<path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"></path>
+			</svg>
+		</li>
+	);
 
 	title = controller.displayLabel();
 	if (controller.linked_channels.parent) {
@@ -717,9 +741,16 @@ MessageRoom.viewHeader = function(controller) {
 			<div class="OC-MessageRoom__header-info" onclick={Helpers.isInReddit() ? controller.toggleApp : null}>
 				<h4>{title}</h4>
 			</div>
-			<ul class="OC-MessageRoom__header-tabs">
-				{tabs}
-			</ul>
+			<div class={'OC-MessageRoom__header-tabs-wrap' + (controller.open_panel ? ' OC-MessageRoom__header-tabs-wrap-subrow' : '')}>
+				<ul class="OC-MessageRoom__header-tabs">
+					{tabs}
+				</ul>
+				<ul class="OC-MessageRoom__header-tabs">
+					<li class="OC-MessageRoom__header-tabs-item">
+						<a class="OC-button__dark" onclick={controller.openChat}>Back to chat</a>
+					</li>
+				</ul>
+			</div>
 		</div>
 	);
 };

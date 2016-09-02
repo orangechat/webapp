@@ -1,0 +1,44 @@
+.{prefix}-Nicklist
+	background-color: #FFFFFF
+	position: absolute
+	right: 0
+	top: topbar-height
+	bottom: 45px
+	z-index: 1
+	min-width: 200px
+	overflow-y: auto
+	transform: translateX(100%)
+	transition: 0.2s
+	box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.14), 0 0px 5px 0 rgba(0, 0, 0, 0.12), 0 2px 1px -2px rgba(0, 0, 0, 0.2)
+
+	&-open
+		transform: translateX(0)
+
+	&__Info
+		text-align: center
+		margin: 16px 0
+
+	&__User
+		padding: base-vs base-hs
+		border: 1px solid #d4d4d4
+		border-width: 0 0 1px 1px
+		border-left: 3px solid brand-primary
+		color: black-text
+		cursor: pointer
+
+		&:hover
+			border-left: 6px solid #4caf50
+			transition: border 0.1s
+
+		&:last-child
+			border-bottom: none
+
+		&--Avatar
+			display: none
+			width: 50px
+			height: 50px
+			border-radius: 25px
+			background: blue
+
+		&--Nick
+			display: inline-block

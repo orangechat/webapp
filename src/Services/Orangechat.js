@@ -203,6 +203,17 @@ Orangechat.prototype.updateChannel = function(channel_name, updates) {
 	});
 };
 
+Orangechat.prototype.channelUserlist = function(channel_name) {
+	var url = this.apiUrl('/channels/users', {
+		channel: channel_name
+	});
+
+	return m.request({method: 'GET', url: url})
+	.then((resp) => {
+		return resp;
+	});
+};
+
 Orangechat.prototype.loadSubreddits = function(force_reddit_update) {
 	var subreddits = this.subreddits;
 	var url = this.apiUrl('/subreddits', force_reddit_update ? {refresh:1} : undefined);
