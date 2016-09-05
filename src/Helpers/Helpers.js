@@ -1,3 +1,6 @@
+import * as Colour from './Colour';
+import {md5} from './md5';
+
 // Some of the helper functions require the app instance. Hacky and bad, but for now it'l do
 var app;
 
@@ -25,68 +28,58 @@ export function isAppActive() {
 var nickColour = (function() {
 	var cache = Object.create(null);
 
-	function sumCharCodes(total, i) {
-		return total + i.charCodeAt(0);
-	}
-
 	return function nickColour(nick) {
-		var nick_lightness, nick_int, rgb;
-		var cache_key = nick.toLowerCase();
-
-		if (!cache[cache_key]) {
-			nick_lightness = 40;
-			nick_int = _.reduce(nick.toLowerCase().split(''), sumCharCodes, 0);
-			rgb = hsl2rgb(nick_int % 200, 70, nick_lightness);
-
-			cache[cache_key] = '#' + ('000000' + (rgb[2] | (rgb[1] << 8) | (rgb[0] << 16)).toString(16)).substr(-6);
+		if (cache[nick]) {
+			return cache[nick];
 		}
 
-		return cache[cache_key];
-	};
+		// The HSL properties are based on this specific colour
+		var starting_colour = '#36809B'; // '#449fc1';
+
+
+		var hash = md5(nick);
+		var hue_offset = mapRange(hexVal(hash, 14, 3), 0, 4095, 0, 359);
+		var sat_offset = hexVal(hash, 17);
+		var base_colour = Colour.rgb2hsl(Colour.hex2rgb(starting_colour));
+		base_colour.h = (((base_colour.h * 360 - hue_offset) + 360) % 360) / 360;
+
+		if (sat_offset % 2 === 0) {
+			base_colour.s = Math.min(1, ((base_colour.s * 100) + sat_offset) / 100);
+		} else {
+			base_colour.s = Math.max(0, ((base_colour.s * 100) - sat_offset) / 100);
+		}
+
+		var rgb = Colour.hsl2rgb(base_colour);
+		var nick_colour = Colour.rgb2hex(rgb);
+
+		cache[nick] = nick_colour;
+
+		return nick_colour;
+	}
 })();
 export { nickColour };
 
 
-export function hsl2rgb(h, s, l) {
-	var m1, m2, hue;
-	var r, g, b;
-	s /= 100;
-	l /= 100;
-	if (s == 0) {
-		r = g = b = (l * 255);
-	} else {
-		if (l <= 0.5) {
-			m2 = l * (s + 1);
-		} else {
-			m2 = l + s - l * s;
-		}
-		m1 = l * 2 - m2;
-		hue = h / 360;
-		r = HueToRgb(m1, m2, hue + 1/3);
-		g = HueToRgb(m1, m2, hue);
-		b = HueToRgb(m1, m2, hue - 1/3);
-	}
+/**
+ * Extract a substring from a hex string and parse it as an integer
+ * @param {string} hash - Source hex string
+ * @param {number} index - Start index of substring
+ * @param {number} [length] - Length of substring. Defaults to 1.
+ */
+export function hexVal(hash, index, len) {
+	return parseInt(hash.substr(index, len || 1), 16);
+}
 
-	return [r, g, b];
+/*
+ * Re-maps a number from one range to another
+ * http://processing.org/reference/map_.html
+ */
+export function mapRange(value, vMin, vMax, dMin, dMax) {
+	var vValue = parseFloat(value);
+	var vRange = vMax - vMin;
+	var dRange = dMax - dMin;
 
-	function HueToRgb(m1, m2, hue) {
-		var v;
-		if (hue < 0)
-			hue += 1;
-		else if (hue > 1)
-			hue -= 1;
-
-		if (6 * hue < 1)
-			v = m1 + (m2 - m1) * hue * 6;
-		else if (2 * hue < 1)
-			v = m2;
-		else if (3 * hue < 2)
-			v = m1 + (m2 - m1) * (2/3 - hue) * 6;
-		else
-			v = m1;
-
-		return 255 * v;
-	}
+	return (vValue - vMin) * dRange / vRange + dMin;
 }
 
 
