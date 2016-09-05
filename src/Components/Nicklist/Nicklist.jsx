@@ -75,7 +75,7 @@ Nicklist.view = function(controller, args) {
 
 	if (users.length > 0) {
 		_.each(users, (user) => {
-			var colour = Helpers.nickColour(user.name);
+			var colour = Helpers.nickColour(user.name.replace('*', ''));
 			list.push(
 				<li class="OC-Nicklist__User" onclick={userMenuFn(user)} key={user.name.toLowerCase()} style={'border-left-color:' + colour}>
 					<div class="OC-Nicklist__User--Avatar"></div>
