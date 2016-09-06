@@ -8,6 +8,7 @@ var Nicklist = {};
 Nicklist.controller = function(args) {
 	this.orangechat = Orangechat.instance();
 
+	this.has_loaded = false;
 	this.users = m.prop([]);
 
 	this.last_refreshed = null;
@@ -41,6 +42,8 @@ Nicklist.controller = function(args) {
 			});
 
 			this.users(ordered_list);
+			this.has_loaded = true;
+
 			m.redraw();
 		});
 	};
@@ -49,15 +52,6 @@ Nicklist.controller = function(args) {
 		args.channel.openUserMenu(mouse_event, user.name, {
 			source: user.source
 		});
-		/*
-		this.bus.trigger('panel.open', event, Helpers.subModule(UserMenu, {
-			bus: this.bus,
-			username: user.nick,
-			source: user.source,
-			room: this,
-			room_manager: this.room_manager
-		}));
-		*/
 	};
 };
 
@@ -73,7 +67,16 @@ Nicklist.view = function(controller, args) {
 	var users = controller.users();
 	var list = [];
 
-	if (users.length > 0) {
+	if (!controller.has_loaded) {
+		list.push(
+			<li class="OC-Nicklist__Loader">
+				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="25 25 50 50">
+					<circle fill="none" stroke-width="4" stroke-miterlimit="10" cx="50" cy="50" r="20" />
+				</svg>
+			</li>
+		);
+
+	} else if (users.length > 0) {
 		_.each(users, (user) => {
 			var colour = Helpers.nickColour(user.name.replace('*', ''));
 			list.push(
@@ -83,6 +86,7 @@ Nicklist.view = function(controller, args) {
 				</li>
 			);
 		});
+
 	} else {
 		list.push(
 			<li class="OC-Nicklist__Info">Nobody to be seen here..</li>
@@ -91,8 +95,13 @@ Nicklist.view = function(controller, args) {
 
 	function nicklistConfig(el, isInitialized, context) {
 		if (!isInitialized) {
-			controller.refreshList();
 			$(el).addClass('OC-Nicklist-open');
+
+			// Give time for the CSS animation to complete before loading the users.
+			// Doing both at the same time causes jank on slower devices
+			setTimeout(() => {
+				controller.refreshList();
+			}, 200);
 		}
 	}
 

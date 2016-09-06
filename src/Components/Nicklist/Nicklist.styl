@@ -42,3 +42,30 @@
 
 		&--Nick
 			display: inline-block
+
+	&__Loader
+		position: relative
+		margin: 20px auto
+		width: 24px
+		padding: base-vs 0
+
+		&:before
+			content:''
+			display: block
+			padding-top: 100%
+
+		svg
+			animation: rotate 2s linear infinite
+			transform-origin: center center
+			position: absolute
+			top: 0
+			bottom: 0
+			left: 0
+			right: 0
+			margin: auto
+
+			circle
+				stroke-dasharray: 1,200
+				stroke-dashoffset: 0
+				animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite
+				stroke-linecap: round
