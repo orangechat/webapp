@@ -1,8 +1,8 @@
 import './Sidebar.styl';
 
 import * as Helpers from '../../Helpers/Helpers.js';
-import Reddit from '../../Services/Reddit.js';
 import OptionsMenu from '../OptionsMenu/OptionsMenu.jsx';
+import ChannelSearch from './ChannelSearch.jsx';
 
 
 /**
@@ -13,14 +13,13 @@ var Sidebar = {};
 Sidebar.controller = function(args) {
 	this.app = args.app;
 	this.mods = m.prop(0);
-	this.is_join_dialog_open = false;
+	this.join_dialog = Helpers.subModule(ChannelSearch, {
+		bus: args.app.bus,
+		app: args.app
+	});
 
 	// When there's a menu to show, this will be it
 	this.options_menu = null;
-
-	// Keep track of the join channel scroll position between renders
-	this.join_channels_scrolltop = m.prop(0);
-	this.join_channel_input = m.prop('');
 
 	this.closeChannel = (channel_name) => {
 		this.app.rooms.closeRoom(channel_name);
@@ -36,55 +35,10 @@ Sidebar.controller = function(args) {
 		});
 	};
 
-	this.openJoinDialog = (event) => {
+	this.onFindChannelsClick = (event) => {
 		this.stopEventPropagation(event);
-
-		if (this.is_join_dialog_open) {
-			return;
-		}
-
-		this.is_join_dialog_open = true;
-
-		if (this.app.subreddits().length === 0) {
-			this.app.subreddits.refresh();
-		}
-
-		this.app.bus.once('action.document_click', this.closeJoinDialog);
-
-		// The search input DOM element won't exist until the next redraw so
-		// force that to happen now so we can give it focus
-		m.redraw(true);
-		$('.OC-Sidebar__header-search-input').focus();
-	};
-
-	this.closeJoinDialog = () => {
-		this.is_join_dialog_open = false;
-	};
-
-	this.joinChannelFormSubmit = (event) => {
-		this.stopEventPropagation(event);
-		var sub_name = this.join_channel_input();
-		this.join_channel_input('');
-
-		// Make sure we actually have characters
-		if ((sub_name||'').replace(/[^a-z0-9]/, '')) {
-			// Normalise the /r/ formatting
-			if (sub_name.toLowerCase().indexOf('r/') === 0) {
-				sub_name = '/' + sub_name;
-			} else if (sub_name.toLowerCase().indexOf('/r/') !== 0) {
-				sub_name = '/r/' + sub_name;
-			}
-
-			var room = this.app.rooms.createRoom(sub_name);
-			this.app.rooms.setActive(room.instance.name());
-			this.closeJoinDialog();
-
-			// Clear the entry box
-			$(event.target).find('input').val('');
-		}
-
-		// Make sure the form does not actually submit anywhere
-		return false;
+		event.preventDefault();
+		this.join_dialog.instance.showList(true);
 	};
 
 	this.stopEventPropagation = (event) => {
@@ -164,28 +118,15 @@ Sidebar.view = function(controller) {
 	// The message underneath the channels explaining where to find channels
 	list.push(
 		<div class="OC-Sidebar__join-something">
-			<a class="OC-Sidebar__join-something-go" onclick={controller.openJoinDialog}>
+			<a class="OC-Sidebar__join-something-go" onclick={controller.onFindChannelsClick}>
 				Find more channels
 			</a>
 		</div>
 	);
 
-	return m('div', {class: !controller.is_join_dialog_open ? 'OC-Sidebar' : 'OC-Sidebar OC-Sidebar--join-dialog-open'}, [
+	return m('div', {class: !controller.join_dialog.instance.list_open ? 'OC-Sidebar' : 'OC-Sidebar OC-Sidebar--join-dialog-open'}, [
 		m('div', {class: 'OC-Sidebar__header'}, [
-			m('form', {class: 'OC-Sidebar__header-search', onsubmit: controller.joinChannelFormSubmit}, [
-				m('svg[version="1.1"][xmlns="http://www.w3.org/2000/svg"][xmlns:xlink="http://www.w3.org/1999/xlink"][width="16"][height="16"][viewBox="0 0 24 24"]', [
-					m('path[d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"]')
-				]),
-				m('input', {
-					type: 'text',
-					class: 'OC-Sidebar__header-search-input',
-					placeholder: 'r/subreddit',
-					onfocus: controller.openJoinDialog,
-					onclick: controller.stopEventPropagation,
-					onkeyup: m.withAttr('value', controller.join_channel_input)
-				})
-			]),
-			controller.is_join_dialog_open ? Sidebar.viewJoinDialog(controller) : null,
+			controller.join_dialog.view(),
 
 			m('div[class="OC-Sidebar__header-user-options"]', {onclick: controller.onOptionsMenuItemClick}, [
 				m('svg[version="1.1"][xmlns="http://www.w3.org/2000/svg"][xmlns:xlink="http://www.w3.org/1999/xlink"][width="24"][height="24"][viewBox="0 0 24 24"]', [
@@ -245,58 +186,6 @@ Sidebar.viewChannelListItem = function(controller, channel, opts) {
 	]);
 
 	return list_item;
-};
-
-Sidebar.viewJoinDialog = function(controller) {
-	var subscribed_sub_count = 0;
-	var current_search = controller.join_channel_input().toLowerCase();
-
-	var subreddit_list = _.map(controller.app.subreddits(), function(sub) {
-		subscribed_sub_count++;
-
-		var sub_compare = sub.name.toLowerCase();
-		if (sub_compare.indexOf(current_search.replace('/r/', '')) > -1) {
-			return sub.name;
-		}
-	});
-	if (Reddit.currentSubreddit()) {
-		subreddit_list.unshift('/r/' + Reddit.currentSubreddit());
-	}
-	subreddit_list = _.compact(subreddit_list);
-
-	subreddit_list = _.map(subreddit_list, function(sub_name) {
-		return m('li', {
-			class: 'OC-Sidebar__join-dialog-channels-item',
-			onclick: function(event) {
-				controller.stopEventPropagation(event);
-				var room = controller.app.rooms.createRoom(sub_name);
-				controller.app.rooms.setActive(room.instance.name());
-				controller.closeJoinDialog();
-			}
-		}, sub_name);
-	});
-
-	if (!subscribed_sub_count) {
-		subreddit_list.push(m('div', {class: 'OC-Sidebar__join-dialog-channels-loading'}, [
-			m('svg[version="1.1"][xmlns="http://www.w3.org/2000/svg"][xmlns:xlink="http://www.w3.org/1999/xlink"][width="30"][height="30"][viewBox="25 25 50 50"]', [
-				m('circle[fill="none"][stroke-width="4"][stroke-miterlimit="10"][cx="50"][cy="50"][r="20"]')
-			])
-		]));
-	}
-
-	return m('div', {class: 'OC-Sidebar__join-dialog'}, [
-		m('ul', {
-			class: 'OC-Sidebar__join-dialog-channels',
-			onscroll: m.withAttr('scrollTop', controller.join_channels_scrolltop),
-			config: function(el, already_initialised) {
-				if (already_initialised) {
-					return;
-				}
-				// Keep our scroll position when we get redrawn
-				el.scrollTop = controller.join_channels_scrolltop();
-			}
-		}, subreddit_list)
-	]);
 };
 
 export default Sidebar;

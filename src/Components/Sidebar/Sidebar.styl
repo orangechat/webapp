@@ -42,16 +42,10 @@
 				color: white-secondary
 				background-color: white-underlays
 				position: relative
+				outline: none
 
 				&::placeholder
 					color: white-secondary
-
-				&:focus
-					outline: 0
-					color: black-secondary
-
-					&::placeholder
-						color: black-secondary
 
 		&-user-options
 			position: absolute
@@ -81,6 +75,12 @@
 		fill: black-secondary
 
 	&--join-dialog-open &__header
+		&-search-input
+			outline: 0
+			color: black-secondary
+
+			&::placeholder
+				color: black-secondary
 
 		&-search
 			opacity: 1
@@ -187,13 +187,38 @@
 		top: 4px
 		right: base-hs
 
+		// The bar under the subscribed / trending selectors
+		&-subswitcher
+			margin-top: 5px
+
+			> a
+				width: 50%
+				border: none
+				outline: none
+				display: inline-block
+				text-align: center
+				font-size: 0.9em
+				padding-bottom: 4px
+
+			&-bar
+				display: block
+				height: 5px
+				background: #4caf50
+				width: 50%
+				position: relative
+				transition: 0.3s
+
+				&--subscribed
+					margin-left: 0
+				&--trending
+					margin-left: 50%
+
 		&-channels
 			max-height: 250px
 			border-top: 1px solid black-dividers
 			overflow-y: auto
 			overflow-x: hidden
-			margin-top: 4px
-			padding-top: base-vs
+			padding-top: 5px
 
 			&-loading
 				position: relative

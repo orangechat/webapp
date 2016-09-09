@@ -101,6 +101,20 @@ Orangechat.prototype.ping = function() {
 
 
 /**
+ * Get a list fo trending channels
+ */
+Orangechat.prototype.trendingChannels = function() {
+	var url = this.apiUrl('/channels/trending');
+	return m.request({
+		method: 'GET',
+		url: url,
+		background: true,
+		initialValue: []
+	});
+};
+
+
+/**
  * Create a private channel and return the channel name
  */
 Orangechat.prototype.createChannel = function(_invite_users) {
