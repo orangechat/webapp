@@ -123,7 +123,7 @@ ChatApp.controller = function(args) {
 
 	// Once we're ready (logged in, app is ready) then we show the active rooms
 	this.addInitialRooms = () => {
-		var default_channel = Config.channels.default;
+		var default_channel = Config.channels.default[0];
 		var channel_list = this.state.get('channel_list') || [];
 		var active_channel = this.state.get('active_channel');
 		var channel_in_url = (!this.is_in_reddit && window.location.hash) ?
