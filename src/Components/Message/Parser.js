@@ -113,7 +113,7 @@ class MessageParser {
 		// Convert /u/user into reddit links
 		ret = ret.replace(/(?:^|\s)(\/?(u\/[a-zA-Z0-9_\-]+))/, (match, group1, group2) => {
 			replacement_made = true;
-			return '<a href="https://www.reddit.com/' + group2 + '">' + group1 + '</a>';
+			return '<a target="_blank" href="https://www.reddit.com/' + group2 + '">' + group1 + '</a>';
 		});
 
 		return replacement_made ?
