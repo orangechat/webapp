@@ -47,6 +47,16 @@ Message.controller = function(args) {
 				this.embed = Helpers.subModule(embed, {url: url});
 			}
 		}
+
+		// Clicking a channel link
+		if(event.target.className === 'OC-Message__content--channel') {
+			let el = event.target;
+			let channel_name = el.getAttribute('data-channel');
+			if (channel_name) {
+				let channel = args.room_manager.createRoom(channel_name);
+				args.room_manager.setActive(channel.instance.name());
+			}
+		}
 	};
 
 	this.closeEmbed = () => {

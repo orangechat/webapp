@@ -115,9 +115,9 @@ class ChannelManager {
 			return;
 		}
 
-		var normalised_name = this.transportSafeRoomName(room_name);
+		var normalised_name = this.transportSafeRoomName(room_name).toLowerCase();
 		return _.find(this.rooms, function(room) {
-			return normalised_name === room.instance.transportSafeRoomName();
+			return normalised_name === room.instance.transportSafeRoomName().toLowerCase();
 		});
 	}
 

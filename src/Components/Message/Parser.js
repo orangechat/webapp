@@ -104,10 +104,10 @@ class MessageParser {
 	parseRedditPhrases(word) {
 		var replacement_made = false;
 		var ret = word;
-		// Convert /r/sub into reddit links
+		// Convert /r/sub into channel links
 		ret = ret.replace(/(?:^|\s)(\/?(r\/[a-zA-Z0-9_]+))/, (match, group1, group2) => {
 			replacement_made = true;
-			return '<a href="https://www.reddit.com/' + group2 + '">' + group1 + '</a>';
+			return '<a href="#" class="OC-Message__content--channel" data-channel="/' + group2 + '">' + group1 + '</a>';
 		});
 
 		// Convert /u/user into reddit links

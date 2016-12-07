@@ -473,7 +473,8 @@ MessageRoom.controller = function(args) {
 
 		var component = Helpers.subModule(Message, {
 			message: message_model,
-			message_room: this
+			message_room: this,
+			room_manager: this.room_manager
 		});
 
 		var message = {
