@@ -36,6 +36,20 @@ UserMenu.controller = function(args) {
 		});
 	};
 
+	this.openPrivateIrcChannel = () => {
+		// Since we only have 1 user in this invite, set the label to
+		// the user name.
+		var label = '[irc] ' + this.username;
+		var channel_name = 'irc_' + this.orangechat.uid() + '_' + this.username;
+
+		var channel = this.room_manager.createRoom(channel_name, {
+			label: label
+		});
+
+		this.room_manager.setActive(channel.instance.name());
+		args.bus.trigger('panel.close');
+	};
+
 	this.inviteToChannel = channel => {
 		this.orangechat.inviteToChannel(channel.name(), this.username).then((resp) => {
 			if (resp.status == 'ok') {
@@ -95,7 +109,17 @@ UserMenu.view = function(controller) {
 	var items = [];
 
 	if (controller.source === 'irc') {
-		items = [m('p', {class: 'OC-Menu__link'}, 'This person is talking via IRC')];
+		//items = [m('p', {class: 'OC-Menu__link'}, 'This person is talking via IRC')];
+		items = [
+			m('p', {
+				class: 'OC-Menu__link'
+			}, 'This person is talking via IRC'),
+
+			m('a', {
+				class: 'OC-Menu__link',
+				onclick: controller.openPrivateIrcChannel
+			}, 'Send private message'),
+		];
 
 	} else {
 		items = [

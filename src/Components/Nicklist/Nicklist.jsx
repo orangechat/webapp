@@ -49,7 +49,7 @@ Nicklist.controller = function(args) {
 	};
 
 	this.nickClick = (mouse_event, user) => {
-		args.channel.openUserMenu(mouse_event, user.name, {
+		args.channel.openUserMenu(mouse_event, user.name.replace('*', ''), {
 			source: user.source
 		});
 	};

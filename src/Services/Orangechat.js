@@ -9,8 +9,8 @@ function Orangechat(state) {
 	this.state = state;
 	this.sid = state('sid') || '';
 	this.username = m.prop(state('username') || '');
+	this.uid = m.prop(state('uid') || '');
 	this.api_url = 'https://app.orangechat.io/app';
-	//this.api_url = 'https://app.orangechat.io/prawnsaladapp';
 	this.subreddits = m.prop([]);
 }
 
@@ -35,9 +35,18 @@ Orangechat.prototype.setSid = function(sid) {
 	this.state.set('sid', sid);
 };
 // TODO: Not a fan of this setter. Find a way to detect changes on m.prop() and use that
-Orangechat.prototype.setUsername = function(username) {
-	this.username(username);
-	this.state.set('username', username);
+Orangechat.prototype.setUsername = function(username, uid) {
+	if (!username) {
+		this.username('');
+		this.uid('');
+		this.state.set('username', '');
+		this.state.set('uid', '');
+	} else {
+		this.username(username);
+		this.uid(uid);
+		this.state.set('username', username);
+		this.state.set('uid', uid);
+	}
 };
 
 
@@ -85,7 +94,7 @@ Orangechat.prototype.ping = function() {
 			just_logged_in = !this.username();
 
 			// Just make sure we know our correct username
-			this.setUsername(resp.username);
+			this.setUsername(resp.username, resp.uid);
 
 			deferred.resolve({
 				just_logged_in: just_logged_in,
@@ -299,7 +308,7 @@ Orangechat.prototype.auth = function() {
 		}
 
 		if (resp.username) {
-			this.setUsername(resp.username);
+			this.setUsername(resp.username, resp.uid);
 			resolveAuth({username: this.username()});
 		}
 	});

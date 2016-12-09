@@ -32,6 +32,12 @@ class ChannelManager {
 				label = event.user;
 			}
 
+			// Add an '[irc]' marker infront of IRC private messages so they dont
+			// get mixed up with reddit usernames
+			if (event.channel_name.indexOf('irc_') === 0) {
+				label = '[irc] ' + label;
+			}
+
 			var channel = this.getRoom(event.channel_name);
 			if (channel) {
 				channel.instance.label(label);
