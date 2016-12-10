@@ -108,6 +108,12 @@ Orangechat.prototype.ping = function() {
 	return deferred.promise;
 };
 
+Orangechat.prototype.pingLoop = function() {
+	this.ping().then(() => {
+		setTimeout(this.pingLoop.bind(this), 1000 * 60 * 3);
+	});
+};
+
 
 /**
  * Get a list fo trending channels

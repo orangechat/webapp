@@ -315,6 +315,8 @@ ChatApp.controller = function(args) {
 	// the user wouldn't have been logged out for no reason then we start by checking the local
 	// state (orangechat.username()) below while the ping call is in progress
 	this.orangechat.ping().then((user_data) => {
+		this.orangechat.pingLoop();
+
 		if (user_data.just_logged_in) {
 			this.addInitialRooms();
 		}
