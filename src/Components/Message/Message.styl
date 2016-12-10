@@ -4,6 +4,7 @@
 	overflow-wrap: break-word
 	word-wrap: break-word
 	position: relative
+	border-bottom: 1px solid #eaeaea;
 
 	&__content
 		&--embed
@@ -52,9 +53,6 @@
 			&:before
 				content: '~ '
 
-	&:nth-child(2n)
-		background-color: #F5F5F5
-
 	&--pending
 		.{OC}-Message__author, .{OC}-Message__content, .{OC}-Message__timestamp
 			opacity: .4
@@ -100,6 +98,7 @@
 			font-size: em(12px)
 			margin-left: 9px
 			display: inline
+			float: right
 
 		&__content
 			font-size: em(14px)
